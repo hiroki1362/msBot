@@ -2,10 +2,13 @@
 var restify = require("restify");
 var builder = require("botbuilder");
 var port = process.env.PORT || 8080;
+var botConnectorOptions = { 
+	    appId: process.env.BOTFRAMEWORK_APPID, 
+	    appSecret: process.env.BOTFRAMEWORK_APPSECRET 
+	};
 
 //BOTの作成
-var bot = new builder.BotConnectorBot({appId: "infodex_DevBot", appSecret: "3dc068bae546425eaa3d5d300eaf1193"});
-//var bot = new builder.BotConnectorBot({appId: "", appSecret: ""});
+var bot = new builder.BotConnectorBot(botConnectorOptions);
 bot.add("/", function (session) {
 	session.send("よくわかんないけど、こんにちわーー！あなたは、「 " + session.message.text + " 」と言いましたね！？");
 });
@@ -13,10 +16,10 @@ bot.add("/", function (session) {
 var server = restify.createServer();
 server.post("/api/messages", bot.verifyBotFramework(), bot.listen());
 
-//server.get(/.*/, restify.serveStatic({
-//	"directory": ".",
-//	"default": "index.html"
-//}));
+server.get(/.*/, restify.serveStatic({
+	'directory': '.',
+	'default': 'index.html'
+}));
 
 server.listen(port, function () {
 	console.log("%s listening to %s", server.name, server.url);
