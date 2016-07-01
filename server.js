@@ -3,7 +3,7 @@ var restify = require("restify");
 var builder = require("botbuilder");
 
 //BOTの作成
-var bot = new builder.BotConnectorBot({appId: process.env.BOTFRAMEWORK_APPID, appSecret: process.env.BOTFRAMEWORK_APPSECRET});
+var bot = new builder.BotConnectorBot({appId: "infodex_DevBot", appSecret: "3dc068bae546425eaa3d5d300eaf1193"});
 //var bot = new builder.BotConnectorBot({appId: "", appSecret: ""});
 bot.add("/", function (session) {
 	session.send("よくわかんないけど、こんにちわーー！あなたは、「 " + session.message.text + " 」と言いましたね！？");
