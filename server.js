@@ -12,8 +12,7 @@ bot.add("/", function (session) {
 var server = restify.createServer();
 server.post("/api/messages", bot.verifyBotFramework(), bot.listen());
 
-
-server.get(/.*/, restify.serverStatic({
+server.get(/.*/, restify.serveStatic({
 	"directory": ".",
 	"default": "index.html"
 }));
