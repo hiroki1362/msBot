@@ -2,14 +2,9 @@
 var restify = require("restify");
 var builder = require("botbuilder");
 var port = process.env.PORT || 8080;
-/*var botConnectorOptions = { 
+var botConnectorOptions = { 
 	    appId: process.env.BOTFRAMEWORK_APPID, 
 	    appSecret: process.env.BOTFRAMEWORK_APPSECRET 
-	};
-	*/
-var botConnectorOptions = { 
-	    appId: process.env.LuisAppId,
-	    appSecret: process.env.LuisSubscriptionKey 
 	};
 var url = "https://api.projectoxford.ai/luis/v1/application?id=" + process.env.LuisAppId +"&subscription-key=" + process.env.LuisSubscriptionKey;
 var dialog = new builder.LuisDialog(url);
