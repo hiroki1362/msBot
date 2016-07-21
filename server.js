@@ -14,11 +14,9 @@ var userName = ""
 //BOTの作成
 var bot = new builder.BotConnectorBot(botConnectorOptions);
 
-bot.dialog("/", function (session) {
-	session.beginDialog("firstTime");
-});
+bot.add("/", builder.DialogAction.beginDialog("/firstTime"));
 
-bot.dialog("/firstTime", [
+bot.add("/firstTime", [
                  function (session) {
                 	 builder.Prompts.text(session, "こんにちは！まずは、あなたのお名前を教えてください！");
                  },
