@@ -14,9 +14,7 @@ var userName = ""
 //BOTの作成
 var bot = new builder.BotConnectorBot(botConnectorOptions);
 
-bot.add("/", function (session) {
-	builder.DialogAction.beginDialog("/firstTime");
-});
+bot.add("/", builder.DialogAction.beginDialog("/firstTime"));
 
 bot.add("/firstTime", [
                  function (session) {
@@ -25,7 +23,7 @@ bot.add("/firstTime", [
                  function (session, results) {
                 	 userName = results.response
                 	 session.send("あなたは、「%s」というんですか？", results.response);
-                	 //builder.DialogAction.beginDialog("/askName");
+                	 builder.DialogAction.beginDialog("/askName");
                  }
 ]);
 
