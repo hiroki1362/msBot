@@ -7,19 +7,13 @@ var botConnectorOptions = {
 	    appSecret: process.env.BOTFRAMEWORK_APPSECRET 
 	};
 var url = "https://api.projectoxford.ai/luis/v1/application?id=" + process.env.LuisAppId +"&subscription-key=" + process.env.LuisSubscriptionKey;
-var dialog = new builder.LuisDialog(url);
+var luisDialog = new builder.LuisDialog(url);
 
 //BOTの作成
-/*var bot = new builder.BotConnectorBot(botConnectorOptions);
-bot.add("/", function (session) {
-	session.send("よくわかんないけど、こんにちわーー！あなたは、「 " + session.message.text + " 」と言いましたね！？");
-});
-*/
-
 var bot = new builder.BotConnectorBot(botConnectorOptions);
-bot.add("/", dialog);
+bot.add("/", luisDialog);
 
-dialog.on("what_day", function (session, args) {
+luisDialog.on("what_day", function (session, args) {
 	console.log('message:');
     console.log(session.message);
 	var date = builder.EntityRecognizer.findEntity(args.entities, "builtin.datetime.date");
@@ -30,13 +24,19 @@ dialog.on("what_day", function (session, args) {
 		var day = "日月火水木金土"[d.getDay()];
 		session.send("その日は「" + day + "曜日」です！" );
 	} else {
-		session.send("日付を取得できませんでした・・・。")
+		session.send("ちょっと何言ってるのかわかりません。")
 	}
 });
 
-dialog.onDefault(function (session, args) {
+
+
+luisDialog.onBegin(function (session, args) {
+	session.send("Hello!! 私は人工知能チャットなんデスが、なぜか設定がEnglishなんデス。日本語にしたいトキは、「I'd like to speak Japanese.」と入力してくださいYO！")
+})
+luisDialog.onDefault(function (session, args) {
 	session.send("質問を理解できませんでした・・・もう一度、お願いします。")
 });
+
 
 var server = restify.createServer();
 server.post("/api/messages", bot.verifyBotFramework(), bot.listen());
