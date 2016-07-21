@@ -23,12 +23,14 @@ bot.add("/firstTime", [
                  function (session, results) {
                 	 userName = results.response
                 	 session.send("あなたは、「%s」というんですか？", results.response);
+                	 builder.DialogAction.endDialog();
                 	 builder.DialogAction.beginDialog("/askName");
                  }
 ]);
 
-bot.add("/normalTalk", luisDialog);
 bot.add("/askName", nameDialog);
+bot.add("/normalTalk", luisDialog);
+
 
 nameDialog.on("I_agree", function (session, args) {
 	session.send(userName + "さん、よろしくです！");
