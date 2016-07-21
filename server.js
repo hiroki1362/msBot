@@ -8,36 +8,40 @@ var botConnectorOptions = {
 	};
 var url = "https://api.projectoxford.ai/luis/v1/application?id=" + process.env.LuisAppId +"&subscription-key=" + process.env.LuisSubscriptionKey;
 
-var nameSetLuis = new builder.LuisRecognizer(url);
-var luisDialog = new builder.LuisRecognizer(url);
-var intents = new builder.IntentDialog({recognizers: [luisDialog]});
-//var luisDialog = new builder.LuisDialog(url);
-
+var luisDialog = new builder.LuisDialog(url);
+var nameDialog = new builder.LuisDialog(url);
+var userName = ""
 //BOTの作成
 var bot = new builder.BotConnectorBot(botConnectorOptions);
-bot.dialog("/", intents);
-intents.matches("what_day", function (session, args) {
-	var date = builder.EntityRecognizer.findEntity(args.entities, "builtin.datetime.date");
-	if (date != undefined && date.resolution != undefined) {
-		var d = new Date(date.resolution.date);
-		var day = "日月火水木金土"[d.getDay()];
-		session.send("その日は「" + day + "曜日」です！" );
-	} else {
-		session.send("ちょっと何言ってるのかわかりません。")
-	}
-})
 
-/*bot.dialog("/", function (session) {
-					 session.Prompts.text(session, "こんにちは！まずは、あなたの名前を入力してくださいね！")
-                	 session.beginDialog("/askName");
-                 });
+bot.dialog("/", function (session) {
+	session.beginDialog("firstTime");
+});
 
-bot.add("/askName", nameSetLuis);
+bot.dialog("/firstTime", [
+                 function (session) {
+                	 builder.Prompts.text(session, "こんにちは！まずは、あなたのお名前を教えてください！");
+                 },
+                 function (session, results) {
+                	 userName = results.response
+                	 session.send("あなたは、「%s」というんですか？", results.response);
+                	 session.beginDialog("askName");
+                 }
+]);
 
-//bot.add("/startLuis", luisDialog);
-*/
+bot.add("/normalTalk", luisDialog);
+bot.add("/askName", nameDialog);
 
-/*
+nameDialog.on("I_agree", function (session, args) {
+	session.send(userName + "さん、よろしくです！");
+	session.beginDialog("normalTalk");
+});
+
+nameDialog.on("Not_agree", function (session, args) {
+	session.send("あぁ、違うんですね。");
+	session.beginDialog("askName");
+});
+
 luisDialog.on("what_day", function (session, args) {
 	console.log('message:');
     console.log(session.message);
@@ -53,15 +57,12 @@ luisDialog.on("what_day", function (session, args) {
 	}
 });
 
-
-
 luisDialog.onBegin(function (session, args) {
 	session.send("Hello!! 私は人工知能チャットなんデスが、なぜか設定がEnglishなんデス。日本語にしたいトキは、「I'd like to speak Japanese.」と入力してくださいYO！")
-})
+});
 luisDialog.onDefault(function (session, args) {
 	session.send("質問を理解できませんでした・・・もう一度、お願いします。")
 });
-*/
 
 var server = restify.createServer();
 server.post("/api/messages", bot.verifyBotFramework(), bot.listen());
