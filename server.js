@@ -23,7 +23,7 @@ bot.add("/firstTime", [
                  function (session, results) {
                 	 userName = results.response
                 	 session.send("あなたは、「%s」というんですか？", results.response);
-                	 session.beginDialog("askName");
+                	 session.beginDialog("/askName");
                  }
 ]);
 
@@ -32,12 +32,12 @@ bot.add("/askName", nameDialog);
 
 nameDialog.on("I_agree", function (session, args) {
 	session.send(userName + "さん、よろしくです！");
-	session.beginDialog("normalTalk");
+	session.beginDialog("/normalTalk");
 });
 
 nameDialog.on("Not_agree", function (session, args) {
 	session.send("あぁ、違うんですね。");
-	session.beginDialog("askName");
+	session.beginDialog("/askName");
 });
 
 luisDialog.on("what_day", function (session, args) {
