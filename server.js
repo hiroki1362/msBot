@@ -15,13 +15,12 @@ var userName = ""
 var bot = new builder.BotConnectorBot(botConnectorOptions);
 
 bot.add("/", function (session) {
-	session.send("こんにちは！");
 	builder.DialogAction.beginDialog("/firstTime");
 });
 
 bot.add("/firstTime", [
                  function (session) {
-                	 builder.Prompts.text(session, "まずは、あなたのお名前を教えてください！");
+                	 builder.Prompts.text(session, "こんにちは！まずは、あなたのお名前を教えてください！");
                  },
                  function (session, results) {
                 	 userName = results.response
