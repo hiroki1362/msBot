@@ -25,7 +25,7 @@ bot.add("/firstTime", [
                  function (session, results) {
                 	 userName = results.response
                 	 session.send("あなたは、「%s」というんですか？", results.response);
-                	 builder.DialogAction.beginDialog("/askName");
+                	 //builder.DialogAction.beginDialog("/askName");
                  }
 ]);
 
