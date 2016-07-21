@@ -14,16 +14,19 @@ var userName = ""
 //BOTの作成
 var bot = new builder.BotConnectorBot(botConnectorOptions);
 
-bot.add("/", builder.DialogAction.beginDialog("/firstTime"));
+bot.add("/", function (session) {
+	session.send("こんにちは！");
+	builder.DialogAction.beginDialog("/firstTime");
+});
 
 bot.add("/firstTime", [
                  function (session) {
-                	 builder.Prompts.text(session, "こんにちは！まずは、あなたのお名前を教えてください！");
+                	 builder.Prompts.text(session, "まずは、あなたのお名前を教えてください！");
                  },
                  function (session, results) {
                 	 userName = results.response
                 	 session.send("あなたは、「%s」というんですか？", results.response);
-                	 session.beginDialog("/askName");
+                	 builder.DialogAction.beginDialog("/askName");
                  }
 ]);
 
@@ -32,12 +35,12 @@ bot.add("/askName", nameDialog);
 
 nameDialog.on("I_agree", function (session, args) {
 	session.send(userName + "さん、よろしくです！");
-	session.beginDialog("/normalTalk");
+	builder.DialogAction.beginDialog("/normalTalk");
 });
 
 nameDialog.on("Not_agree", function (session, args) {
 	session.send("あぁ、違うんですね。");
-	session.beginDialog("/askName");
+	builder.DialogAction.beginDialog("/askName");
 });
 
 luisDialog.on("what_day", function (session, args) {
@@ -55,9 +58,6 @@ luisDialog.on("what_day", function (session, args) {
 	}
 });
 
-luisDialog.onBegin(function (session, args) {
-	session.send("Hello!! 私は人工知能チャットなんデスが、なぜか設定がEnglishなんデス。日本語にしたいトキは、「I'd like to speak Japanese.」と入力してくださいYO！")
-});
 luisDialog.onDefault(function (session, args) {
 	session.send("質問を理解できませんでした・・・もう一度、お願いします。")
 });
