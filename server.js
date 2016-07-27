@@ -26,7 +26,7 @@ bot.add("/greeting", [
                      function (session, results) {
                     	 session.userData.name = results.response;
                     	 session.send("こんにちわ！" + session.userData.name + "さん、よろしくね！");
-                    	 session.beginDialog("/greeting")
+                    	 session.beginDialog("/phone")
                      }
                       ]);
 
