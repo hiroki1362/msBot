@@ -10,8 +10,8 @@ var botConnectorOptions = {
 //BOTの作成
 var bot = new builder.BotConnectorBot(botConnectorOptions);
 
-bot.dialog("/", function (session) {
-	session.send("こんにちわ！Botの世界！");
+bot.add("/", function (session) {
+	session.send("こんにちわ！Botの世界！")
 })
 
 var server = restify.createServer();
