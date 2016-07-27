@@ -12,7 +12,6 @@ var bot = new builder.BotConnectorBot(botConnectorOptions);
 
 bot.add("/", function (session) {
 	if (session.userData.name) {
-		session.send("あ、こんにちわ" + session.userData.name + "さん。");
 		session.beginDialog("/greeting")
 	} else {
 		session.send("あ、こんにちわ" + session.userData.name + "さん。");
