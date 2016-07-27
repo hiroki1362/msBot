@@ -23,7 +23,7 @@ bot.add("/greeting", [
                      function (session) {
                     	 builder.Prompts.text(session, "こんにちわ！ところで、あなたは何て名前なの？");
                      },
-                     function (session, result) {
+                     function (session, results) {
                     	 session.userData.name = results.response;
                     	 session.send("こんにちわ！" + session.userData.name + "さん、よろしくね！");
                     	 session.beginDialog("/greeting")
