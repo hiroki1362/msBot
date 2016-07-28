@@ -94,6 +94,9 @@ bot.add("/waterFall", [
                      },
                      function (session) {
                     	 session.send(session.userData.name + "さんは、" + session.userData.company + "に勤めていて" + session.userData.phone + "ユーザなんですね！むっちゃ変人ですね！");
+                    	 session.userData.name = "";
+                    	 session.userData.phone = "";
+                    	 session.userData.campany = "";
                     	 session.endDialog();
                      }
                      ]);
