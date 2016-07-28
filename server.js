@@ -37,12 +37,12 @@ bot.add("/waterFall", [
                      function (session, results, next) {
                     	 var res = results.response.entity;
 						 if (res == "糸電話" || res == "狼煙") {
-							session.send(res + "？はいはい、どうせそういうと思いましたよ・・・真面目に答えてくれないと先に進めないのでちゃんと答えてくださいね。");
-							} else {
+							session.send(res + "？はいはい、どうせそういうと思いましたよ・・・");
+						} else {
 								session.send("あ、" + res + "を使ってるんですね！");
-								session.userData.phone = res;
-								next();
 						 }
+						 session.userData.phone = res;
+						next();
                      },
                      function (session) {
                     	 builder.Prompts.text(session, "さてさて" + session.userData.phone + "使いの" + session.userData.name + "さん、どこにお勤めでしたっけ？");
