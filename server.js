@@ -10,6 +10,7 @@ var botConnectorOptions = {
 //BOTの作成
 var bot = new builder.BotConnectorBot(botConnectorOptions);
 
+/*
 var dialog   = new builder.CommandDialog();
 
 //起動時のハンドリング
@@ -47,23 +48,23 @@ bot.add('/profile/last', [
 ]);
 
 bot.add("/", dialog)
+*/
 
-/*
 bot.add("/", function (session) {
 	session.beginDialog("/waterFall");
 })
 
 bot.add("/waterFall", [
-                     function (session) {
+                     function (session, next) {
                     	 if (!session.userData.name) {
                     		 builder.Prompts.text(session, "こんにちわ！ところで、あなたは何て名前なの？");
                     	 } else {
                     		 next();
                     	 }
                      },
-                     function (session, results) {
+                     function (session, results, next) {
                     	 if (!session.userData.name) {
-                    		 session.userData.name = results.response;
+                    		 session.userData.name = results.response.replace("だよ", "");
                         	 session.send("こんにちわ！" + session.userData.name + "さん、よろしくね！");
                     	 } else {
                     		 session.send("あ、こんにちわ" + session.userData.name + "さん。");
@@ -71,9 +72,9 @@ bot.add("/waterFall", [
                     	 next();
                      },
                      function (session) {
-                    	 builder.Prompts.choice("ところで" + session.userData.name + "さん、携帯は何使ってるんでしたっけ？", "iPhone|Android|ガラケー|糸電話|狼煙");
+                    	 builder.Prompts.choice(session, "ところで" + session.userData.name + "さん、携帯は何使ってるんでしたっけ？", "iPhone|Android|ガラケー|糸電話|狼煙");
                      },
-                     function (session, results) {
+                     function (session, results, next) {
                     	 var res = results.response.entity;
 						 if (res == "糸電話" || res == "狼煙") {
 							session.send(res + "？はいはい、どうせそういうと思いましたよ・・・真面目に答えてくれないと先に進めないのでちゃんと答えてくださいね。");
@@ -84,15 +85,18 @@ bot.add("/waterFall", [
 						 }
                      },
                      function (session) {
-                    	 builder.Prompts.texts(session, "さてさて" + session.userData.phone + "使いの" + session.userData.name + "さん、どこにお勤めでしたっけ？");
+                    	 builder.Prompts.text(session, "さてさて" + session.userData.phone + "使いの" + session.userData.name + "さん、どこにお勤めでしたっけ？");
                      },
-                     function (session, results){
-                    	 session.userData.company = results.response;
+                     function (session, results, next){
+                    	 session.userData.company = results.response.replace("だよ", "");
                     	 session.send("そうですか！" + session.userData.company + "に勤めてらっしゃるんですね！");
+                    	 next();
+                     },
+                     function (session) {
+                    	 session.send(session.userData.name + "さんは、" + session.userData.company + "に勤めていて" + session.userData.phone + "ユーザなんですね！むっちゃ変人ですね！");
                     	 session.endDialog();
                      }
                      ]);
-                     */
 
 var server = restify.createServer();
 server.post("/api/messages", bot.verifyBotFramework(), bot.listen());
