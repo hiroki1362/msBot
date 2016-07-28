@@ -10,46 +10,6 @@ var botConnectorOptions = {
 //BOTの作成
 var bot = new builder.BotConnectorBot(botConnectorOptions);
 
-/*
-var dialog   = new builder.CommandDialog();
-
-//起動時のハンドリング
-dialog.matches('名前おしえるね', function (session) {
-if (! session.userData.firstName) {
- session.beginDialog('/profile/first');
-} else if(! session.userData.lastName) {
- session.beginDialog('/profile/last');
-} else {
- session.send(session.userData.lastName + session.userData.firstName + '・・・');
- session.send('覚えたぞ！！！');
-}
-});
-
-//ファーストネームを聞く処理
-bot.add('/profile/first', [
- function (session) {
-     builder.Prompts.text(session, 'ファーストネーム教えて！！！');
- },
- function (session, results) {
-     session.userData.firstName = results.response;
-     session.endDialog();
- }
-]);
-
-//ラストネームを聞く処理
-bot.add('/profile/last', [
- function (session) {
-     builder.Prompts.text(session, 'ラストネーム教えて！！！');
- },
- function (session, results) {
-     session.userData.lastName = results.response;
-     session.endDialog();
- }
-]);
-
-bot.add("/", dialog)
-*/
-
 bot.add("/", function (session) {
 	session.beginDialog("/waterFall");
 })
