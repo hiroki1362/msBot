@@ -15,6 +15,7 @@ bot.add("/", function (session) {
 		session.beginDialog("/greeting")
 	} else {
 		session.send("あ、こんにちわ" + session.userData.name + "さん。");
+		session.endDialog();
 		session.beginDialog("/phone");
 	}
 })
@@ -26,6 +27,7 @@ bot.add("/greeting", [
                      function (session, results) {
                     	 session.userData.name = results.response;
                     	 session.send("こんにちわ！" + session.userData.name + "さん、よろしくね！");
+                    	 session.endDialog();
                     	 session.beginDialog("/phone")
                      }
                       ]);
