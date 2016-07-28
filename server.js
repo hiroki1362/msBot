@@ -15,7 +15,7 @@ bot.add("/", function (session) {
 		session.beginDialog("/greeting")
 	} else {
 		session.send("あ、こんにちわ" + session.userData.name + "さん。");
-		session.beginDialog("/phone");
+		session.beginDialog("/greeting/phone");
 	}
 })
 
@@ -26,11 +26,11 @@ bot.add("/greeting", [
                      function (session, results) {
                     	 session.userData.name = results.response;
                     	 session.send("こんにちわ！" + session.userData.name + "さん、よろしくね！");
-                    	 session.replaceDialog("/phone")
+                    	 session.beginDialog("/greeting/phone")
                      }
                       ]);
 
-bot.add("/phone", [
+bot.add("/greeting/phone", [
                    function (session) {
                 	   builder.Prompts.choice("ところで" + session.userData.name + "さん、携帯は何使ってるんでしたっけ？", "iPhone|Android|ガラケー|糸電話|狼煙")
                    },
