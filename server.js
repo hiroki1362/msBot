@@ -46,6 +46,7 @@ bot.add('/profile/last', [
  }
 ]);
 
+bot.add("/", dialog)
 
 /*
 bot.add("/", function (session) {
