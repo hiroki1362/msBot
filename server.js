@@ -26,16 +26,28 @@ dialog.on("what_day", function (session, args) {
 		var day = "日月火水木金土"[d.getDay()];
 		session.send("その日は「" + day + "曜日」です！" );
 	} else {
-		session.send("ちょっと何言ってるのかわかりません。")
+		session.send("あ、ごめん、ちょっとそれはわからないです。")
 	}
+});
+
+dialog.on("greet_morning", function (session, args) {
+	session.send("あ、おはようございます！")
 });
 
 dialog.on("greet_hello", function (session, args) {
 	session.send("どうもー！こんにちは！！")
 });
 
+dialog.on("greet_evening", function (session, args) {
+	session.send("こんばんわ！")
+});
+
+dialog.on("greet_night", function (session, args) {
+	session.send("もう寝るの？おやすみなさーい。")
+});
+
 dialog.onDefault(function (session, args) {
-	session.send("質問を理解できませんでした・・・もう一度、お願いします。")
+	session.send("あ、ごめん、ちょっとそれはわからないです。")
 });
 
 var server = restify.createServer();
