@@ -9,57 +9,34 @@ var botConnectorOptions = {
 
 //BOTの作成
 var bot = new builder.BotConnectorBot(botConnectorOptions);
+var url = "https://api.projectoxford.ai/luis/v1/application?id=" + process.env.LuisAppId +"&subscription-key=" + process.env.LuisSubscriptionKey;
 
-bot.add("/", function (session) {
-	session.beginDialog("/waterFall");
-})
+var dialog = new new builder.LuisDialog(url);
 
-bot.add("/waterFall", [
-                     function (session, next) {
-                    	 if (!session.userData.name) {
-                    		 builder.Prompts.text(session, "こんにちわ！ところで、あなたは何て名前なの？");
-                    	 } else {
-                    		 next();
-                    	 }
-                     },
-                     function (session, results, next) {
-                    	 if (!session.userData.name) {
-                    		 session.userData.name = results.response.replace("だよ", "");
-                        	 session.send("こんにちわ！" + session.userData.name + "さん、よろしくね！");
-                    	 } else {
-                    		 session.send("あ、こんにちわ" + session.userData.name + "さん。");
-                    	 }
-                    	 next();
-                     },
-                     function (session) {
-                    	 builder.Prompts.choice(session, "ところで" + session.userData.name + "さん、携帯は何使ってるんでしたっけ？", "iPhone|Android|ガラケー|糸電話|狼煙");
-                     },
-                     function (session, results, next) {
-                    	 var res = results.response.entity;
-						 if (res == "糸電話" || res == "狼煙") {
-							session.send(res + "？はいはい、どうせそういうと思いましたよ・・・");
-						} else {
-								session.send("あ、" + res + "を使ってるんですね！");
-						 }
-						 session.userData.phone = res;
-						next();
-                     },
-                     function (session) {
-                    	 builder.Prompts.text(session, "さてさて" + session.userData.phone + "使いの" + session.userData.name + "さん、どこにお勤めでしたっけ？");
-                     },
-                     function (session, results, next){
-                    	 session.userData.company = results.response.replace("だよ", "");
-                    	 session.send("そうですか！" + session.userData.company + "に勤めてらっしゃるんですね！");
-                    	 next();
-                     },
-                     function (session) {
-                    	 session.send(session.userData.name + "さんは、" + session.userData.company + "に勤めていて" + session.userData.phone + "ユーザなんですね！むっちゃ変人ですね！");
-                    	 session.userData.name = "";
-                    	 session.userData.phone = "";
-                    	 session.userData.campany = "";
-                    	 session.endDialog();
-                     }
-                     ]);
+bot.add("/", dialog);
+
+dialog.on("what_day", function (session, args) {
+	console.log('message:');
+    console.log(session.message);
+	var date = builder.EntityRecognizer.findEntity(args.entities, "builtin.datetime.date");
+	console.log('date:');
+    console.log(date);
+	if (date != undefined && date.resolution != undefined) {
+		var d = new Date(date.resolution.date);
+		var day = "日月火水木金土"[d.getDay()];
+		session.send("その日は「" + day + "曜日」です！" );
+	} else {
+		session.send("ちょっと何言ってるのかわかりません。")
+	}
+});
+
+dialog.on("greet_hello", function (session, args) {
+	session.send("どうもー！こんにちは！！")
+});
+
+dialog.onDefault(function (session, args) {
+	session.send("質問を理解できませんでした・・・もう一度、お願いします。")
+});
 
 var server = restify.createServer();
 server.post("/api/messages", bot.verifyBotFramework(), bot.listen());
